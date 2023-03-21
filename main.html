@@ -1,0 +1,33 @@
+window.onload = function() {
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var photoInput = document.getElementById('photo-input');
+    var textInput = document.getElementById('text-input');
+    var writeButton = document.getElementById('write-button');
+    var preview = document.getElementById('preview');
+
+    // Load selected image onto canvas
+    photoInput.addEventListener('change', function(e) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var img = new Image();
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0);
+            }
+            img.src = event.target.result;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    });
+
+    // Write text onto canvas and preview it
+    writeButton.addEventListener('click', function() {
+        context.font = "30px Arial";
+        context.fillStyle = "white";
+        context.textAlign = "center";
+        context.fillText(textInput.value, canvas.width/2, canvas.height/2);
+
+        preview.src = canvas.toDataURL();
+    });
+};
